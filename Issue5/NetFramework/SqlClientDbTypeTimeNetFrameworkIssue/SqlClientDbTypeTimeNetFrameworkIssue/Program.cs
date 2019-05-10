@@ -2,7 +2,7 @@
 using System;
 using System.Data;
 
-namespace SqlClientDbTypeTimeIssueNetFramework
+namespace SqlClientDbTypeTimeNetFrameworkIssue
 {
     /*
      * System.BadImageFormatException: 'Could not load file or assembly 'Microsoft.Data.SqlClient, Version=1.0.19128.1, Culture=neutral, PublicKeyToken=23ec7fc2d6eaa4a5' or one of its dependencies. An attempt was made to load a program with an incorrect format.'
