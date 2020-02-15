@@ -24,9 +24,9 @@ Issue Link: https://github.com/dotnet/SqlClient/issues/5
 3. To test the issue, follow the steps for 4 and 5.
 4. For NetFramework:
 	- Navigate to folder 'NetFramework'.
-	- Open the SqlClientDbTypeTimeAndDateIssue.sln
+	- Open the SqlClientDbTypeTimeNetFrameworkIssue.sln
 	- Click F5.
 4. For NetCore:
 	- Navigate to folder 'NetCore'.
-	- Open the SqlClientDbTypeTimeAndDateIssue.sln
+	- Open the SqlClientDbTypeTimeIssueNetCore.sln
 	- Click F5.
