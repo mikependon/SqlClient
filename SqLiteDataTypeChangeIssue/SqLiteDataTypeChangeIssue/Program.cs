@@ -1,5 +1,6 @@
 ﻿using Microsoft.Data.Sqlite;
 using System;
+using System.Data.SQLite;
 
 namespace SqLiteDataTypeChangeIssue
 {
@@ -21,7 +22,7 @@ namespace SqLiteDataTypeChangeIssue
                 Query(connection);
                 Insert(connection);
                 Query(connection);
-                Delete(connection);
+                Delete(connection); // InsertOrReplace(connection);
                 Query(connection);
             }
         }
@@ -42,11 +43,11 @@ namespace SqLiteDataTypeChangeIssue
                     }
                     while (reader.Read())
                     {
-                        Console.WriteLine($"Id = {reader.GetString(0)}, " +
+                        Console.WriteLine($"Id = {reader.GetInt32(0)}, " +
                             $"ColumnBigInt = {(reader.IsDBNull(1) ? default : reader.GetInt64(1))} " +
                             $"ColumnDecimal = {(reader.IsDBNull(2) ? default : reader.GetDecimal(2))} " +
                             $"ColumnInt = {(reader.IsDBNull(3) ? default : reader.GetInt32(3))} " +
-                            $"ColumnNumeric = {(reader.IsDBNull(4) ? default : reader.GetDouble(4))}");
+                            $"ColumnNumeric = {(reader.IsDBNull(4) ? default : reader.GetDecimal(4))}");
                         count++;
                     }
                     Console.WriteLine($"{count} rows(s) found.");
@@ -111,6 +112,36 @@ namespace SqLiteDataTypeChangeIssue
             using (var command = connection.CreateCommand())
             {
                 command.CommandText = "DELETE FROM [CompleteTable];";
+
+                // Execute
+                command.ExecuteNonQuery();
+            }
+        }
+
+        static void InsertOrReplace(SqliteConnection connection)
+        {
+            Console.WriteLine(new string('-', 50));
+            Console.WriteLine("Inserting or Replacing...");
+            using (var command = connection.CreateCommand())
+            {
+                command.CommandText = "REPLACE INTO [CompleteTable] " +
+                    "(Id, ColumnInt) " +
+                    "VALUES " +
+                    "(@Id, @ColumnInt);";
+
+                // ColumnInt
+                var parameter = command.CreateParameter();
+                parameter.ParameterName = "@ColumnInt";
+                parameter.DbType = System.Data.DbType.Int32;
+                parameter.Value = new Random().Next(int.MaxValue);
+                command.Parameters.Add(parameter);
+
+                // Id
+                parameter = command.CreateParameter();
+                parameter.ParameterName = "@Id";
+                parameter.DbType = System.Data.DbType.Int32;
+                parameter.Value = 1; // Pre-assume newly generated id
+                command.Parameters.Add(parameter);
 
                 // Execute
                 command.ExecuteNonQuery();
